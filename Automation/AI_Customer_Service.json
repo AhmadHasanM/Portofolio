@@ -19,7 +19,7 @@
       "typeVersion": 1.1,
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{Your Telegram API}",
           "name": "Telegram account"
         }
       }
@@ -128,7 +128,7 @@
       "webhookId": "dd397451-6b34-496f-bdee-e47eda136b7d",
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{Your Telegram API}",
           "name": "Telegram account"
         }
       }
@@ -161,7 +161,7 @@
       "typeVersion": 4.5,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "e62wXJJ9zaEctk4a",
+          "id": "{Your Google Sheets API}",
           "name": "Google Sheets account"
         }
       }
@@ -181,7 +181,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "zZzhglMNkjOxeZ0H",
+          "id": "{Your Gemini API}",
           "name": "CS Tele"
         }
       }
