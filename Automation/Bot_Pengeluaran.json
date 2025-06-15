@@ -10,7 +10,7 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "K82491351988957"
+              "value": "{Your API KEY}"
             }
           ]
         },
@@ -90,7 +90,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1t5DrQulKLaFF15R2nrHgZrn1YCsc--vt0Ea_og4EXnU",
+          "value": "{Your Document ID}",
           "mode": "list",
           "cachedResultName": "Keuangan Pribadi",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t5DrQulKLaFF15R2nrHgZrn1YCsc--vt0Ea_og4EXnU/edit?usp=drivesdk"
@@ -187,7 +187,7 @@
       "name": "Google Sheets1",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "e62wXJJ9zaEctk4a",
+          "id": "{Your Google Sheets API}",
           "name": "Google Sheets account"
         }
       }
@@ -218,7 +218,7 @@
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "xoTbpOr29Uk6uoDT",
+          "id": "{Your Google Gemini API}",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -241,7 +241,7 @@
       "webhookId": "f652f9a2-ff00-4c57-b3a6-d881a0a5307a",
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{YOUR Telegram API}",
           "name": "Telegram account"
         }
       }
@@ -262,7 +262,7 @@
       "webhookId": "c8a98e29-0c1f-4c4f-b07d-ef38ecc06d2e",
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{Your Telegram API}",
           "name": "Telegram account"
         }
       }
@@ -284,7 +284,7 @@
       "webhookId": "71581623-a468-45c9-9e12-35d1d8912821",
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{Your Telegram Api}",
           "name": "Telegram account"
         }
       }
@@ -451,7 +451,7 @@
       "webhookId": "c8a98e29-0c1f-4c4f-b07d-ef38ecc06d2e",
       "credentials": {
         "telegramApi": {
-          "id": "3BaN1IsvhAD7Hx97",
+          "id": "{Your Telegram API}",
           "name": "Telegram account"
         }
       }
