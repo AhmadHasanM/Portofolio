@@ -1,0 +1,713 @@
+{
+  "name": "Bot Pengeluaran",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ocr.space/parse/image",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "K82491351988957"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "filetype",
+              "value": "={{ $binary.data.fileExtension}}"
+            },
+            {
+              "name": "OCREngine",
+              "value": "3"
+            },
+            {
+              "name": "isTable",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2280,
+        320
+      ],
+      "id": "e6991d13-ff3e-4e97-b410-a65e570ad6e8",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analisa transaksi pengeluaran atau pemasukan dari file yg di upload berikut ini berikut ini dan kamu catat untuk spreadsheet dengan kolom berikut \n\n1. Kolom Timestamp pakai tanggal {{$now}} \n2. kolom Tanggal ambil tanggal dari struk dengan format Tanggal/bulan/tahun\n3. Keterangan adalah nama produknya\t\n4. Pengeluaran adalah harga masing-masing item pengeluaran dalam format ribuan menggunakan lokalisasi indonesia\n5. Pemasukan adalah biaya yang keluar jika ada item pengeluaran\n\n\n## instruksi\n- Bagi item ke satu baris satu bari untuk dimasukkan ke dalam google sheets\n- Jika ada tax/ppn/vat/pajak lain jika total item tidak sama yg dibayar kamu catat pajaknya. jika total item dengan jumlah yg dibayar sama pajaknya sudah include harga tidak perlu dicatat atau jika ppn tidak masuk item tidak perlu dicatat\n- Kamu harus gunakan Tools Google Sheets untuk memasukkan ke google sheet, dan tambahkan delay setiap request ke tools google sheets selama 1 detik, request pertama success delay 1 detik kemudian baru request berikutnya dan seterusnya\n- Gunakan thinking tools untuk reasoning jika diperlukan\n- Kamu hanya perlu catat item saja tidak termasuk total\n- koreksi jika ada penulisan nama item yang salah atau typo\n- Setelah semua berhasil terinput, tunjukkan hasilnya yang kamu insert item apa saja dalam format markdown\n- Jika user tidak mengirimkan file yg berisi item jawab dengan bahasa indonesia dan kasih arahan",
+        "options": {
+          "systemMessage": "Kamu adalah asisten keuangan untuk emalkukan pencatatan pendapatan dan pengeluaran sehingga dapan tercatat rapi dan terstruktur, dari file yg di upload atau input text",
+          "maxIterations": 100,
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        3420,
+        580
+      ],
+      "id": "6ba7e5e4-c9f0-4ad3-88b9-e29d858e68d5",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "ParsedResults[0].ParsedText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2500,
+        320
+      ],
+      "id": "bd74d5c8-fe80-47b9-a0ea-2d607e345958",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Append row in sheet in Google Sheets",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1t5DrQulKLaFF15R2nrHgZrn1YCsc--vt0Ea_og4EXnU",
+          "mode": "list",
+          "cachedResultName": "Keuangan Pribadi",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t5DrQulKLaFF15R2nrHgZrn1YCsc--vt0Ea_og4EXnU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13mbk0CAHaWrfZW8jJBnUZGbWye5MiYksdB1bq1IFObo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Timestamp', ``, 'string') }}",
+            "Tanggal": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Tanggal', ``, 'string') }}",
+            "Keterangan": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Keterangan', ``, 'string') }}",
+            "No": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('No', ``, 'string') }}",
+            "Pengeluaran": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Pengeluaran', ``, 'string') }}",
+            "Pemasukan": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Pemasukan', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "No",
+              "displayName": "No",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tanggal",
+              "displayName": "Tanggal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keterangan",
+              "displayName": "Keterangan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pengeluaran",
+              "displayName": "Pengeluaran",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Pemasukan",
+              "displayName": "Pemasukan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        3500,
+        800
+      ],
+      "id": "0c4ca88f-eee5-496c-a19e-74831dda05eb",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "e62wXJJ9zaEctk4a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        3620,
+        800
+      ],
+      "id": "944c5a85-3bb4-4be0-a1e5-612ae861afd5",
+      "name": "Think1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3380,
+        800
+      ],
+      "id": "7317ece4-d07d-45e7-a3b7-81ddb9a54dc8",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "xoTbpOr29Uk6uoDT",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        2280,
+        940
+      ],
+      "id": "0b630e2c-6e52-4fe0-aab4-70c18e723040",
+      "name": "Telegram Trigger1",
+      "webhookId": "f652f9a2-ff00-4c57-b3a6-d881a0a5307a",
+      "credentials": {
+        "telegramApi": {
+          "id": "3BaN1IsvhAD7Hx97",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[$json.message.photo.length-1].file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2940,
+        680
+      ],
+      "id": "ec24039a-02a4-4536-9c33-c2b38bca6843",
+      "name": "Telegram3",
+      "webhookId": "c8a98e29-0c1f-4c4f-b07d-ef38ecc06d2e",
+      "credentials": {
+        "telegramApi": {
+          "id": "3BaN1IsvhAD7Hx97",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4300,
+        820
+      ],
+      "id": "0af7f07a-f2d4-4ed9-84ba-8e59856923f8",
+      "name": "Telegram4",
+      "webhookId": "71581623-a468-45c9-9e12-35d1d8912821",
+      "credentials": {
+        "telegramApi": {
+          "id": "3BaN1IsvhAD7Hx97",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2210508b-aa72-4ebe-b9c9-1f4247143cf4",
+              "name": "ParsedText",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3160,
+        1140
+      ],
+      "id": "e5141d27-d1ba-4b68-9858-b09bed247341",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.photo }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "8a7aa6e3-caa4-491d-94ba-5c5b324e1102"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0f96b251-fbf5-4d3a-ab00-80737f72a96f",
+                    "leftValue": "={{ $json.message.document }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4c1c925a-15be-4ea4-b984-d37c02fa66a4",
+                    "leftValue": "={{ $json.message.photo }}",
+                    "rightValue": "={{ $json.message.document }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2500,
+        940
+      ],
+      "id": "55751c66-3ef1-4898-827c-63c12d60cf9a",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2940,
+        940
+      ],
+      "id": "79c4cbb6-736f-4b99-b86f-142da51421c9",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2210508b-aa72-4ebe-b9c9-1f4247143cf4",
+              "name": "ParsedText",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3160,
+        940
+      ],
+      "id": "40a2288a-ea31-4e0a-85a8-ebf0c7f07ff5",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.document.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2720,
+        940
+      ],
+      "id": "a6e5ebfa-4e2e-4847-bbd8-15ff0b061991",
+      "name": "Telegram5",
+      "webhookId": "c8a98e29-0c1f-4c4f-b07d-ef38ecc06d2e",
+      "credentials": {
+        "telegramApi": {
+          "id": "3BaN1IsvhAD7Hx97",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "$('Telegram3').item.binary.data.mimeType = \"image/jpg\"\nreturn{\n  json: {},\n  binary: $('Telegram3').item.binary\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3160,
+        680
+      ],
+      "id": "5255a739-4067-4c5d-aa92-9e080e6d5c35",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analisa transaksi pengeluaran atau pemasukan berikut ini kamu catat untuk spreadsheet dengan kolom berikut \n{{ $json.ParsedText }}\n1. Kolom Timestamp pakai tanggal {{$now}} \n2. kolom Tanggal ambil tanggal dari struk dengan format Tanggal/bulan/tahun\n3. Keterangan adalah nama produknya\t\n4. Pengeluaran adalah harga masing-masing item pengeluaran dalam format ribuan menggunakan lokalisasi indonesia\n5. Pemasukan adalah biaya yang keluar jika ada item pengeluaran\n\n\n## instruksi\n- Bagi item ke satu baris satu bari untuk dimasukkan ke dalam google sheets\n- Jika ada tax/ppn/vat/pajak lain jika total item tidak sama yg dibayar kamu catat pajaknya. jika total item dengan jumlah yg dibayar sama pajaknya sudah include harga tidak perlu dicatat, atau jika ppn tidak masuk item tidak perlu dicatat\n- Kamu harus gunakan Tools Google Sheets untuk memasukkan ke google sheet, dan tambahkan delay setiap request ke tools google sheets selama 1 detik, request pertama success delay 1 detik kemudian baru request berikutnya dan seterusnya\n- Gunakan thinking tools untuk reasoning jika diperlukan\n- Kamu hanya perlu catat item saja tidak termasuk total\n- koreksi jika ada penulisan nama item yang salah atau typo\n- Setelah semua berhasil terinput, tunjukkan hasilnya yang kamu insert item apa saja dalam format markdown\n- Jika user tidak mengirimkan file yg berisi item jawab dengan bahasa indonesia dan kasih arahan, jawab sesuai dengan konteks pembicaraan",
+        "options": {
+          "systemMessage": "Kamu adalah asisten keuangan untuk emalkukan pencatatan pendapatan dan pengeluaran sehingga dapan tercatat rapi dan terstruktur, dari file yg di upload atau input text.\n\nKamu bisa jawab juga hal-hal terkait dengan bidang keuangan yg kamu ketahui",
+          "maxIterations": 100,
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        3420,
+        1140
+      ],
+      "id": "91afbb14-79d6-4d7d-a14e-dd9543c70610",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format the existing message for Telegram\nfunction formatForTelegram(inputText) {\n  // 1. Escape all special MarkdownV2 characters\n  const escapedText = inputText\n    .replace(/\\_/g, '\\\\_')\n    .replace(/\\*/g, '\\\\*')\n    .replace(/\\[/g, '\\\\[')\n    .replace(/\\]/g, '\\\\]')\n    .replace(/\\(/g, '\\\\(')\n    .replace(/\\)/g, '\\\\)')\n    .replace(/\\~/g, '\\\\~')\n    .replace(/\\`/g, '\\\\`')\n    .replace(/\\>/g, '\\\\>')\n    .replace(/\\#/g, '\\\\#')\n    .replace(/\\+/g, '\\\\+')\n    .replace(/\\-/g, '\\\\-')\n    .replace(/\\=/g, '\\\\=')\n    .replace(/\\|/g, '\\\\|')\n    .replace(/\\{/g, '\\\\{')\n    .replace(/\\}/g, '\\\\}');\n    \n  // 2. Replace the bullet points with Telegram-friendly format\n  return escapedText.replace(/\\*\\s+/g, '• ');\n}\n\n// Get the input text (assuming it's in the first item's json.output)\nconst inputText = $input.first().json.output\n\n// Format the message\nconst telegramMessage = formatForTelegram(inputText);\n\n// Return the formatted message for the Telegram node\nreturn {\n  json: {\n    message: telegramMessage,\n    parse_mode: 'MarkdownV2'\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        820
+      ],
+      "id": "3fded2d0-f223-452e-88eb-dcd23507aca3",
+      "name": "Code3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram3": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Telegram3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram5": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Telegram4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "91261b37-9732-4e71-8c84-6a45f0a9590d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0c6c9d3a719a58b9bb73dc493c3fd1c9915b0796d71699b11b03dff65aa799d0"
+  },
+  "id": "M13YXxemlLPMSQ9Z",
+  "tags": []
+}
