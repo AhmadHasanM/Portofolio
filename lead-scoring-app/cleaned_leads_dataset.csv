@@ -1,0 +1,101 @@
+Perusahaan,Industri,Revenue (USD millions),Revenue growth,Employees,State,converted
+Walmart,30,648125,6.0,2100000,5,1
+Amazon,31,574785,11.9,1525000,64,1
+Apple,12,383482,-2.8,161000,18,0
+UnitedHealth Group,22,371622,14.6,440000,43,1
+Berkshire Hathaway,9,364482,20.7,396500,52,1
+CVS Health,22,357776,10.9,259500,70,1
+ExxonMobil,27,344582,-16.7,61500,65,0
+Alphabet,33,307394,8.7,182502,46,1
+McKesson Corporation,20,276711,4.8,48000,31,0
+Cencora,29,262173,9.9,44000,17,0
+Costco,30,242290,6.8,316000,32,1
+JPMorgan Chase,15,239425,54.7,309926,49,1
+Microsoft,33,211915,6.9,221000,56,1
+Cardinal Health,22,205012,13.0,47520,24,0
+Chevron Corporation,27,200949,-18.4,45600,28,0
+Cigna,21,195265,8.2,71413,7,0
+Ford Motor Company,6,176191,11.5,177000,20,1
+Bank of America,16,171912,49.4,212985,12,1
+General Motors,6,171842,9.6,163000,22,1
+Elevance Health,22,171340,9.4,104900,29,1
+Citigroup,16,156820,55.1,237925,49,1
+Centene,22,153999,6.5,67700,67,0
+The Home Depot,30,152669,-3.0,463100,2,0
+Marathon Petroleum,27,150307,-16.5,18200,25,0
+Kroger,30,150039,-3.6,414000,14,0
+Phillips 66,27,149890,-14.7,14000,28,0
+Fannie Mae,16,141240,16.2,8100,69,0
+Walgreens Boots Alliance,28,139081,4.8,268500,21,0
+Valero Energy,27,139001,-18.8,9987,60,0
+Meta Platforms,32,134902,15.7,67317,40,0
+Verizon Communications,35,133974,-2.1,105400,49,0
+AT&T,10,122428,1.4,150470,19,0
+Comcast,35,121572,0.1,186000,54,0
+Wells Fargo,16,115340,39.2,226000,61,1
+Goldman Sachs,16,108418,57.8,45300,49,0
+Freddie Mac,16,108050,24.6,8020,38,0
+Target Corporation,30,107412,-1.6,415000,42,0
+Humana,21,106374,14.5,67600,36,0
+State Farm,16,104199,16.6,65054,8,0
+Tesla,5,96773,18.8,140473,3,1
+Morgan Stanley,16,96194,45.9,80006,49,0
+Johnson & Johnson,28,95195,0.3,131900,48,0
+Archer Daniels Midland,17,93935,-7.5,41008,13,0
+PepsiCo,7,91471,5.9,318000,55,1
+United Parcel Service,36,90958,-9.3,382550,2,0
+FedEx,36,90155,-3.6,446400,39,0
+The Walt Disney Company,26,88898,7.5,199125,11,1
+Dell Technologies,32,88425,-13.6,120000,59,0
+Lowe's,30,86377,-11.0,226000,45,0
+Procter & Gamble,11,82006,2.3,107000,14,0
+Energy Transfer Partners,27,78586,-12.6,13786,19,0
+Boeing,0,77794,16.8,171000,0,1
+Albertsons,30,77650,8.0,198650,9,1
+Sysco,19,76325,11.2,71750,28,0
+RTX Corporation,9,68920,2.8,185000,0,0
+General Electric,9,67954,-11.2,125000,10,0
+Lockheed Martin,0,67571,2.4,122000,6,0
+American Express,14,67364,21.1,74600,49,0
+Caterpillar,25,67060,12.8,113200,31,1
+MetLife,16,66905,-4.3,45000,49,0
+HCA Healthcare,22,64968,7.9,265000,47,1
+Progressive Corporation,24,62109,25.2,61432,37,0
+IBM,33,61860,-16.3,296600,1,0
+John Deere,2,61251,16.5,82956,44,0
+Nvidia,32,60922,125.9,29600,63,0
+StoneX Group,16,60856,-7.8,4137,49,0
+Merck & Co.,28,60115,1.4,71000,33,0
+ConocoPhillips,27,58574,-28.7,9900,28,0
+Pfizer,28,58496,-41.7,88000,49,0
+Delta Air Lines,3,58048,14.8,103000,2,1
+TD Synnex,23,57555,-7.7,28000,15,0
+Publix,30,57534,4.7,253000,35,0
+Allstate,24,57094,11.1,53200,51,0
+Cisco,34,56998,10.6,84900,62,0
+Nationwide Mutual Insurance Company,14,54609,6.1,24118,16,0
+Charter Communications,35,54607,1.1,101100,68,0
+AbbVie,28,54317,-6.4,50000,34,0
+New York Life Insurance Company,24,54317,14.2,15384,49,0
+Intel,32,54228,-14.0,124800,63,0
+TJX,30,49936,2.9,329000,27,0
+Prudential Financial,16,53979,-10.1,40366,50,0
+HP,32,53718,-14.5,58000,53,0
+United Airlines,3,53717,19.5,103300,13,1
+Performance Food Group,18,53355,13.1,34825,58,0
+Tyson Foods,18,52788,-0.8,139000,66,0
+American Airlines,3,52788,7.8,132100,26,1
+Liberty Mutual,24,52612,5.3,45000,10,0
+Nike,4,51217,9.6,83700,4,0
+Oracle Corporation,32,49954,17.7,164000,3,1
+Enterprise Products,27,49715,-14.6,7500,28,0
+Capital One Financial,16,49484,29.0,51987,58,0
+Plains All American Pipeline,27,48712,-15.1,4200,28,0
+World Kinect Corporation,13,47711,-19.2,5289,23,0
+AIG,24,46802,-17.1,25200,49,0
+Coca-Cola,7,45754,6.4,79100,2,0
+TIAA,16,45735,11.8,16023,49,0
+CHS,1,45590,-4.6,10609,30,0
+Bristol-Myers Squibb,28,45006,-2.5,34100,49,0
+Dow Chemical Company,8,44622,-21.6,35900,41,0
+Best Buy,30,43452,-6.1,85000,57,0
