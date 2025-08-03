@@ -62,3 +62,6 @@ pip install -r requirements.txt
 
 3. **Run the Streamlit app**
 streamlit run app.py
+
+📎 Demo Links
+🔗 App: https://yourname-lead-scoring-app.streamlit.app
