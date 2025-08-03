@@ -67,29 +67,3 @@ elif menu == "🎯 Lead Scoring":
             st.success(f"✅ Lead ini bernilai tinggi (Confidence: {proba:.2%})")
         else:
             st.warning(f"⚠️ Lead ini bernilai rendah (Confidence: {proba:.2%})")
-
-# ---------------------------
-# 3️⃣ MENU GENERATED AI EMAIL
-# ---------------------------
-elif menu == "✉️ Generated AI Email":
-    st.title("📧 Generated AI Email")
-    st.markdown("Masukkan informasi untuk membuat email penawaran otomatis.")
-
-    nama_client = st.text_input("Nama Client")
-    nama_perusahaan = st.text_input("Nama Perusahaan")
-    produk = st.text_input("Produk yang Ditawarkan")
-    promo = st.text_input("Promo / Diskon (opsional)", "")
-
-    if st.button("Generate Email"):
-        email_template = f"""
-        Halo {nama_client},
-
-        Kami dari {nama_perusahaan} ingin menawarkan produk **{produk}** yang dapat membantu bisnis Anda berkembang lebih pesat.
-        {"Kami juga memberikan promo spesial: " + promo if promo else ""}
-
-        Jika Anda tertarik, kami dengan senang hati akan mengatur pertemuan lebih lanjut.
-
-        Salam hangat,  
-        Tim Marketing {nama_perusahaan}
-        """
-        st.markdown(email_template)
