@@ -64,4 +64,4 @@ pip install -r requirements.txt
 streamlit run app.py
 
 📎 Demo Links
-🔗 App: https://yourname-lead-scoring-app.streamlit.app
+🔗 App: https://portofolio-3ecq65zn5beqvbz9dd3brb.streamlit.app/
