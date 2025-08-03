@@ -17,7 +17,7 @@ else:
 
 # --- SIDEBAR MENU ---
 st.sidebar.title("📊 Menu Dashboard")
-menu = st.sidebar.radio("Pilih Menu:", ["📁 Data Perusahaan", "🎯 Lead Scoring", "✉️ Generated AI Email"])
+menu = st.sidebar.radio("Pilih Menu:", ["📁 Data Perusahaan", "🎯 Lead Scoring"])
 
 # ---------------------------
 # 1️⃣ MENU DATA PERUSAHAAN
@@ -67,3 +67,4 @@ elif menu == "🎯 Lead Scoring":
             st.success(f"✅ Lead ini bernilai tinggi (Confidence: {proba:.2%})")
         else:
             st.warning(f"⚠️ Lead ini bernilai rendah (Confidence: {proba:.2%})")
+
