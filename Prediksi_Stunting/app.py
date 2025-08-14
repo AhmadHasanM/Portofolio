@@ -6,16 +6,14 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-# Optional import untuk unduh model dari Google Drive
 try:
     import gdown
 except ImportError:
     gdown = None
 
-# === Konfigurasi Halaman Streamlit ===
 st.set_page_config(page_title="Prediksi Stunting", page_icon="🍼", layout="wide")
 
-# === Path Base & File ===
+# === Path & Konfigurasi ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 GOOGLE_DRIVE_FILE_ID = "1pyjGOgXPauxs5eisE_plXbqU1vbWTINr"
 DRIVE_URL = f"https://drive.google.com/uc?id={GOOGLE_DRIVE_FILE_ID}"
@@ -37,10 +35,10 @@ def load_model():
             raise RuntimeError("gdown belum terpasang. Tambahkan ke requirements.txt.")
         tmp = os.path.join(tempfile.gettempdir(), "tmp_model.pkl")
         gdown.download(DRIVE_URL, tmp, quiet=False)
-        shutil.move(tmp, LOCAL_MODEL_PATH)  # Ganti os.replace -> shutil.move
+        shutil.move(tmp, LOCAL_MODEL_PATH)
     return joblib.load(LOCAL_MODEL_PATH)
 
-# === Sidebar Menu ===
+# === Sidebar ===
 st.sidebar.title("Menu")
 mode = st.sidebar.radio("Pilih Mode:", ["Dashboard", "Predict"])
 
@@ -85,27 +83,28 @@ else:
 
     st.markdown("Isi data dibawah untuk memprediksi stunting.")
 
-    overweight = st.selectbox("Overweight", ["0", "1"])
-    tinggi_balita = st.number_input("Tinggi Badan Balita (cm)", min_value=30.0, max_value=140.0, value=75.0)
-    pendidikan_ibu = st.selectbox("Pendidikan Ibu", list(range(1, 8)))
-    berat_balita = st.number_input("Berat Badan Balita (kg)", min_value=1.0, max_value=30.0, value=8.5)
-    panjang_lahir = st.number_input("Panjang Badan Saat Lahir (cm)", min_value=25.0, max_value=65.0, value=49.0)
-    pekerjaan_ibu = st.selectbox("Pekerjaan Ibu", list(range(1, 10)))
-    berat_lahir = st.number_input("Berat Badan Saat Lahir (kg)", min_value=0.8, max_value=6.0, value=3.0)
-    usia_hamil = st.number_input("Usia Kehamilan Saat Lahir (minggu)", min_value=20, max_value=45, value=38)
-    lingkar_kepala = st.number_input("Lingkar Kepala Saat Lahir (cm)", min_value=20.0, max_value=45.0, value=33.0)
+    # Ambil urutan fitur yang dipakai model
+    try:
+        expected_features = list(model.feature_names_in_)
+    except AttributeError:
+        st.error("Model tidak menyimpan nama fitur. Pastikan model dilatih dengan pandas DataFrame.")
+        st.stop()
+
+    # Mapping input form sesuai urutan kolom training
+    user_input = {}
+    for feature in expected_features:
+        if feature.lower() in ["overweight", "underweight", "wasting", "stunting"]:
+            user_input[feature] = int(st.selectbox(feature, ["0", "1"]))
+        else:
+            user_input[feature] = st.number_input(
+                feature, 
+                value=0.0, 
+                step=1.0, 
+                format="%.2f"
+            )
 
     if st.button("Prediksi"):
-        X = pd.DataFrame([[
-            int(overweight), tinggi_balita, pendidikan_ibu,
-            berat_balita, panjang_lahir, pekerjaan_ibu,
-            berat_lahir, usia_hamil, lingkar_kepala
-        ]], columns=[
-            "overweight", "tinggi_badan_balita", "pendidikan_ibu",
-            "berat_badan_balita", "panjang_badan_saat_lahir", "pekerjaan_ibu",
-            "berat_badan_saat_lahir", "usia_kehamilan_saat_lahiran", "lingkar_kepala_saat_lahir"
-        ])
-
+        X = pd.DataFrame([[user_input[feat] for feat in expected_features]], columns=expected_features)
         pred = model.predict(X)[0]
         proba = model.predict_proba(X)[0][1] if hasattr(model, "predict_proba") else None
         label = "Stunting" if pred == 1 else "Tidak Stunting"
