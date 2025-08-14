@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
 import joblib
 import os
-import seaborn as sns
-import matplotlib.pyplot as plt
-import plotly.express as px
 
 # ================================
 # --- LOAD MODEL & DATA ---
@@ -80,7 +80,7 @@ elif menu == "🧠 Predict":
         asi_eksklusif = st.selectbox("ASI Eksklusif", ["Ya", "Tidak"])
         daerah = st.text_input("Daerah")
 
-    # Mapping categorical ke numerik (contoh)
+    # Mapping categorical ke numerik (sesuaikan dengan model)
     pendidikan_map = {"SD": 0, "SMP": 1, "SMA": 2, "Perguruan Tinggi": 3}
     asi_map = {"Tidak": 0, "Ya": 1}
 
