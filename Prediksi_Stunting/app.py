@@ -1,5 +1,6 @@
 import os
 import tempfile
+import shutil
 import joblib
 import pandas as pd
 import streamlit as st
@@ -11,30 +12,35 @@ try:
 except ImportError:
     gdown = None
 
+# === Konfigurasi Halaman Streamlit ===
 st.set_page_config(page_title="Prediksi Stunting", page_icon="🍼", layout="wide")
 
-# === Konfigurasi Model & Dataset ===
+# === Path Base & File ===
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 GOOGLE_DRIVE_FILE_ID = "1pyjGOgXPauxs5eisE_plXbqU1vbWTINr"
 DRIVE_URL = f"https://drive.google.com/uc?id={GOOGLE_DRIVE_FILE_ID}"
-LOCAL_MODEL_PATH = "stunting_model.pkl"
-DATA_CSV = "stunting_data.csv"
+LOCAL_MODEL_PATH = os.path.join(BASE_DIR, "stunting_model.pkl")
+DATA_CSV = os.path.join(BASE_DIR, "stunting_data.csv")
 
+# === Fungsi Load Data ===
 @st.cache_data(show_spinner=False)
 def load_data(path=DATA_CSV):
-    return pd.read_csv(path) if os.path.exists(path) else pd.DataFrame()
+    if os.path.exists(path):
+        return pd.read_csv(path)
+    return pd.DataFrame()
 
+# === Fungsi Load Model ===
 @st.cache_resource(show_spinner=True)
 def load_model():
-    # Unduh model jika belum ada
     if not os.path.exists(LOCAL_MODEL_PATH):
         if gdown is None:
             raise RuntimeError("gdown belum terpasang. Tambahkan ke requirements.txt.")
         tmp = os.path.join(tempfile.gettempdir(), "tmp_model.pkl")
         gdown.download(DRIVE_URL, tmp, quiet=False)
-        os.replace(tmp, LOCAL_MODEL_PATH)
+        shutil.move(tmp, LOCAL_MODEL_PATH)  # Ganti os.replace -> shutil.move
     return joblib.load(LOCAL_MODEL_PATH)
 
-# Sidebar Menu
+# === Sidebar Menu ===
 st.sidebar.title("Menu")
 mode = st.sidebar.radio("Pilih Mode:", ["Dashboard", "Predict"])
 
@@ -49,12 +55,21 @@ if mode == "Dashboard":
         st.subheader("Visualisasi Stunting per Daerah (KBTEKS)")
         if "KBTEKS" in df.columns and "stunting" in df.columns:
             agg = df.groupby("KBTEKS")["stunting"].sum().reset_index()
-            fig = px.bar(agg, x="KBTEKS", y="stunting", labels={"stunting":"Jumlah Stunting","KBTEKS":"Daerah"})
+            fig = px.bar(
+                agg, 
+                x="KBTEKS", 
+                y="stunting", 
+                labels={"stunting": "Jumlah Stunting", "KBTEKS": "Daerah"}
+            )
             st.plotly_chart(fig, use_container_width=True)
            
             st.subheader("Persentase Stunting")
-            vc = df["stunting"].value_counts().rename({0:"Tidak", 1:"Ya"})
-            fig2 = px.pie(values=vc.values, names=vc.index, title="Persentase Stunting")
+            vc = df["stunting"].value_counts().rename({0: "Tidak", 1: "Ya"})
+            fig2 = px.pie(
+                values=vc.values, 
+                names=vc.index, 
+                title="Persentase Stunting"
+            )
             st.plotly_chart(fig2, use_container_width=True)
         else:
             st.warning("Kolom `KBTEKS` atau `stunting` tidak ada di dataset.")
@@ -72,10 +87,10 @@ else:
 
     overweight = st.selectbox("Overweight", ["0", "1"])
     tinggi_balita = st.number_input("Tinggi Badan Balita (cm)", min_value=30.0, max_value=140.0, value=75.0)
-    pendidikan_ibu = st.selectbox("Pendidikan Ibu", list(range(1,8)))
+    pendidikan_ibu = st.selectbox("Pendidikan Ibu", list(range(1, 8)))
     berat_balita = st.number_input("Berat Badan Balita (kg)", min_value=1.0, max_value=30.0, value=8.5)
     panjang_lahir = st.number_input("Panjang Badan Saat Lahir (cm)", min_value=25.0, max_value=65.0, value=49.0)
-    pekerjaan_ibu = st.selectbox("Pekerjaan Ibu", list(range(1,10)))
+    pekerjaan_ibu = st.selectbox("Pekerjaan Ibu", list(range(1, 10)))
     berat_lahir = st.number_input("Berat Badan Saat Lahir (kg)", min_value=0.8, max_value=6.0, value=3.0)
     usia_hamil = st.number_input("Usia Kehamilan Saat Lahir (minggu)", min_value=20, max_value=45, value=38)
     lingkar_kepala = st.number_input("Lingkar Kepala Saat Lahir (cm)", min_value=20.0, max_value=45.0, value=33.0)
@@ -94,6 +109,7 @@ else:
         pred = model.predict(X)[0]
         proba = model.predict_proba(X)[0][1] if hasattr(model, "predict_proba") else None
         label = "Stunting" if pred == 1 else "Tidak Stunting"
+
         if proba is not None:
             st.success(f"**{label}** (Confidence: {proba:.2%})")
         else:
