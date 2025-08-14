@@ -41,8 +41,8 @@ column_mapping = {
 }
 
 @st.cache_data(show_spinner=False)
-def load_data(path=DATA_CSV):
-    return pd.read_csv(path) if os.path.exists(path) else pd.DataFrame()
+def load_data(path=df):
+    return pd.read_xlsx(path) if os.path.exists(path) else pd.DataFrame()
 
 @st.cache_resource(show_spinner=True)
 def load_model():
@@ -123,5 +123,6 @@ else:
 
         with st.expander("Lihat input yang digunakan"):
             st.write(X)
+
 
 
