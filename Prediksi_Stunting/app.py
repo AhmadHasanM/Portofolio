@@ -18,7 +18,7 @@ st.set_page_config(page_title="Prediksi Stunting", page_icon="🍼", layout="wid
 GOOGLE_DRIVE_FILE_ID = "1pyjGOgXPauxs5eisE_plXbqU1vbWTINr"
 DRIVE_URL = f"https://drive.google.com/uc?id={GOOGLE_DRIVE_FILE_ID}"
 LOCAL_MODEL_PATH = "stunting_model.pkl"
-DATA_CSV = "stunting_data.csv"
+DATA_CSV = "stunting_data.xlsx"
 
 # Mapping kolom user-friendly → kolom asli dataset/model
 column_mapping = {
@@ -123,3 +123,4 @@ else:
 
         with st.expander("Lihat input yang digunakan"):
             st.write(X)
+
