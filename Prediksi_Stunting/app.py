@@ -83,28 +83,32 @@ else:
 
     st.markdown("Isi data dibawah untuk memprediksi stunting.")
 
-    # Ambil urutan fitur yang dipakai model
+    # Ambil fitur yang diharapkan model
     try:
         expected_features = list(model.feature_names_in_)
     except AttributeError:
         st.error("Model tidak menyimpan nama fitur. Pastikan model dilatih dengan pandas DataFrame.")
         st.stop()
 
-    # Mapping input form sesuai urutan kolom training
-    user_input = {}
+    # Form input dinamis sesuai kolom model
+    user_input_dict = {}
     for feature in expected_features:
         if feature.lower() in ["overweight", "underweight", "wasting", "stunting"]:
-            user_input[feature] = int(st.selectbox(feature, ["0", "1"]))
+            user_input_dict[feature] = int(st.selectbox(feature, ["0", "1"]))
         else:
-            user_input[feature] = st.number_input(
-                feature, 
-                value=0.0, 
-                step=1.0, 
+            user_input_dict[feature] = st.number_input(
+                feature,
+                value=0.0,
                 format="%.2f"
             )
 
     if st.button("Prediksi"):
-        X = pd.DataFrame([[user_input[feat] for feat in expected_features]], columns=expected_features)
+        # Pastikan semua kolom ada dan urutannya sama
+        for col in expected_features:
+            if col not in user_input_dict:
+                user_input_dict[col] = 0
+        X = pd.DataFrame([[user_input_dict[col] for col in expected_features]], columns=expected_features)
+
         pred = model.predict(X)[0]
         proba = model.predict_proba(X)[0][1] if hasattr(model, "predict_proba") else None
         label = "Stunting" if pred == 1 else "Tidak Stunting"
