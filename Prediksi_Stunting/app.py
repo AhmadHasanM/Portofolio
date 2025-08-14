@@ -18,7 +18,7 @@ st.set_page_config(page_title="Prediksi Stunting", page_icon="🍼", layout="wid
 GOOGLE_DRIVE_FILE_ID = "1pyjGOgXPauxs5eisE_plXbqU1vbWTINr"
 DRIVE_URL = f"https://drive.google.com/uc?id={GOOGLE_DRIVE_FILE_ID}"
 LOCAL_MODEL_PATH = "stunting_model.pkl"
-df = "stunting_data.xlsx"
+DATA_EXCEL = "stunting_data.xlsx"
 
 # Mapping kolom user-friendly → kolom asli dataset/model
 column_mapping = {
@@ -41,7 +41,7 @@ column_mapping = {
 }
 
 @st.cache_data(show_spinner=False)
-def load_data(path=df):
+def load_data(path=DATA_EXCEL):
     return pd.read_xlsx(path) if os.path.exists(path) else pd.DataFrame()
 
 @st.cache_resource(show_spinner=True)
@@ -64,7 +64,7 @@ if mode == "Dashboard":
     df = load_data()
 
     if df.empty:
-        st.warning("`stunting_data.csv` tidak ditemukan. Upload dataset ke proyek.")
+        st.warning("`stunting_data.xlsx` tidak ditemukan. Upload dataset ke proyek.")
     else:
         st.subheader("Visualisasi Stunting per Daerah (KBTEKS)")
         if "KBTEKS" in df.columns and "stunting" in df.columns:
@@ -123,6 +123,7 @@ else:
 
         with st.expander("Lihat input yang digunakan"):
             st.write(X)
+
 
 
 
