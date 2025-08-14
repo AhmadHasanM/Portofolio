@@ -1,5 +1,6 @@
 import os
 import tempfile
+import shutil
 import joblib
 import pandas as pd
 import streamlit as st
@@ -50,7 +51,7 @@ def load_model():
             raise RuntimeError("gdown belum terpasang. Tambahkan ke requirements.txt.")
         tmp = os.path.join(tempfile.gettempdir(), "tmp_model.pkl")
         gdown.download(DRIVE_URL, tmp, quiet=False)
-        os.replace(tmp, LOCAL_MODEL_PATH)
+        shutil.move(tmp, LOCAL_MODEL_PATH)  # Ganti os.replace → shutil.move
     return joblib.load(LOCAL_MODEL_PATH)
 
 # Sidebar Menu
@@ -108,7 +109,6 @@ else:
             user_inputs[label] = st.number_input(label, value=0.0)
 
     if st.button("Prediksi"):
-        # Convert ke DataFrame sesuai nama kolom model
         X = pd.DataFrame([[user_inputs[label] for label in column_mapping.keys()]],
                          columns=column_mapping.values())
 
