@@ -25,13 +25,5 @@ This project provides an API for dynamically creating presentations. It integrat
 - Python 3.10+
 - Dependencies listed in `requirements.txt`
 
-### Setup
 
-```bash
-git clone https://github.com/Caprae-Capital-Partners/LeadGenAI.git
-git checkout sandbox-database-ppt-gen
-cd backend-database\backend\services\ppt-generator
-python -m venv .env
-.env\Scripts\activate  # On Mac: source .env/bin/activate
-pip install -r requirements.txt
 
