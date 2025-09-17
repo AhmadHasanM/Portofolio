@@ -1,4 +1,4 @@
-# PPT Generator Backend
+# PPT Generator
 
 Backend service for generating PowerPoint presentations with AI-driven content, customizable templates, and export options.
 
@@ -34,3 +34,4 @@ cd backend-database\backend\services\ppt-generator
 python -m venv .env
 .env\Scripts\activate  # On Mac: source .env/bin/activate
 pip install -r requirements.txt
+
