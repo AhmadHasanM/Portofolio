@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>AI PPT Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+  <div class="max-w-4xl mx-auto py-10 space-y-8">
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-center">AI Presentation Generator</h1>
+
+    <!-- Form Card -->
+    <div class="bg-gray-800 shadow-md rounded-lg p-8 space-y-6">
+      
+      <!-- Company Dropdown -->
+      <div>
+        <label class="block mb-2 font-semibold">Company</label>
+        <select id="company" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2">
+          <option value="">Select a company</option>
+          <option value="OpenAI">OpenAI</option>
+          <option value="Google">Google</option>
+          <option value="Microsoft">Microsoft</option>
+          <option value="Tesla">Tesla</option>
+        </select>
+      </div>
+
+      <!-- Context Points -->
+      <div>
+        <label class="block mb-2 font-semibold">Context Points</label>
+        <textarea id="context1" rows="3" placeholder="Context point 1 (min 20 words)" 
+          class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 mb-3"></textarea>
+        <textarea id="context2" rows="3" placeholder="Context point 2 (min 20 words)" 
+          class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 mb-3"></textarea>
+        <textarea id="context3" rows="3" placeholder="Context point 3 (optional)" 
+          class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2"></textarea>
+      </div>
+
+      <!-- Checkboxes -->
+      <div>
+        <label class="block mb-2 font-semibold">Include Options</label>
+        <div class="flex items-center space-x-4">
+          <label class="flex items-center space-x-2">
+            <input type="checkbox" id="aiNews" class="accent-blue-500">
+            <span>AI News</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input type="checkbox" id="companyInsight" class="accent-blue-500">
+            <span>Company Insight</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Template Selection -->
+      <div>
+        <label class="block mb-2 font-semibold">Choose Template</label>
+        <div class="grid grid-cols-3 gap-4">
+          <!-- Classic -->
+          <label class="cursor-pointer">
+            <input type="radio" name="template" value="classic" class="hidden peer">
+            <div class="p-3 bg-gray-700 rounded-lg border peer-checked:border-blue-500 transition">
+              <img src="{{ url_for('main.static', filename='templates/classic.png') }}" 
+                   alt="Classic Template Preview" class="rounded mb-2 w-full h-24 object-cover">
+              <p class="font-medium text-center">Classic</p>
+              <button type="button" onclick="openPreview('classic')" 
+                class="block mt-2 text-sm text-blue-400 hover:underline text-center w-full">
+                Preview Template
+              </button>
+            </div>
+          </label>
+          <!-- General -->
+          <label class="cursor-pointer">
+            <input type="radio" name="template" value="general" class="hidden peer">
+            <div class="p-3 bg-gray-700 rounded-lg border peer-checked:border-blue-500 transition">
+              <img src="{{ url_for('main.static', filename='templates/general.png') }}" 
+                   alt="General Template Preview" class="rounded mb-2 w-full h-24 object-cover">
+              <p class="font-medium text-center">General</p>
+              <button type="button" onclick="openPreview('general')" 
+                class="block mt-2 text-sm text-blue-400 hover:underline text-center w-full">
+                Preview Template
+              </button>
+            </div>
+          </label>
+          <!-- Business -->
+          <label class="cursor-pointer">
+            <input type="radio" name="template" value="business" class="hidden peer">
+            <div class="p-3 bg-gray-700 rounded-lg border peer-checked:border-blue-500 transition">
+              <img src="{{ url_for('main.static', filename='templates/business.png') }}" 
+                   alt="Business Template Preview" class="rounded mb-2 w-full h-24 object-cover">
+              <p class="font-medium text-center">Business</p>
+              <button type="button" onclick="openPreview('business')" 
+                class="block mt-2 text-sm text-blue-400 hover:underline text-center w-full">
+                Preview Template
+              </button>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Number of Slides -->
+      <div>
+        <label class="block mb-2 font-semibold">Number of Slides</label>
+        <select id="slideCount" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2">
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </div>
+
+      <!-- Generate Button -->
+      <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold">
+        Generate PPT
+      </button>
+    </div>
+
+    <!-- Output Section -->
+    <div id="output" class="hidden bg-gray-800 p-6 rounded-lg space-y-4">
+      <h2 class="text-xl font-bold">Generated Presentation</h2>
+      <div id="preview" class="space-y-3 text-gray-300"></div>
+      <a id="downloadLink" href="#" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-white">
+        Download PPT
+      </a>
+    </div>
+
+    <!-- History Section -->
+    <div id="history" class="bg-gray-800 shadow-md rounded-lg p-6 space-y-4">
+      <h2 class="text-xl font-bold">History</h2>
+      <div id="historyList" class="space-y-3 text-gray-300"></div>
+    </div>
+  </div>
+
+  <!-- Modal Preview -->
+  <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50">
+    <div class="bg-gray-900 rounded-lg w-4/5 h-4/5 relative p-4 overflow-y-auto">
+      <button onclick="closePreview()" class="absolute top-2 right-2 text-white bg-red-600 px-3 py-1 rounded">
+        Close
+      </button>
+      <div id="previewSlides" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+        <!-- Slide preview images will load here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadHistory() {
+      const res = await fetch("/api/history");
+      if (res.ok) {
+        const data = await res.json();
+        const list = document.getElementById("historyList");
+        list.innerHTML = "";
+        data.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "flex justify-between items-center bg-gray-700 p-3 rounded";
+          div.innerHTML = `
+            <div>
+              <p class="font-semibold text-white">${item.company}</p>
+              <p class="text-sm text-gray-400">${item.template} • ${item.slideCount} slides</p>
+            </div>
+            <a href="${item.download_url}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+              Download
+            </a>
+          `;
+          list.appendChild(div);
+        });
+      }
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const company = document.getElementById("company").value;
+      const context1 = document.getElementById("context1").value;
+      const context2 = document.getElementById("context2").value;
+      const context3 = document.getElementById("context3").value;
+      const aiNews = document.getElementById("aiNews").checked;
+      const companyInsight = document.getElementById("companyInsight").checked;
+      const template = document.querySelector("input[name='template']:checked")?.value;
+      const slideCount = document.getElementById("slideCount").value;
+
+      if (!company || !context1 || !context2 || !template) {
+        alert("Isi minimal company, 2 context points, dan pilih template!");
+        return;
+      }
+
+      const response = await fetch("/api/generate_ppt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company, context1, context2, context3,
+          aiNews, companyInsight,
+          template, slideCount
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        document.getElementById("preview").innerHTML = `
+          <div class="bg-gray-700 p-4 rounded">
+            <p><strong>Company:</strong> ${company}</p>
+            <p><strong>Slides:</strong> ${slideCount}</p>
+            <p><strong>Template:</strong> ${template}</p>
+          </div>
+        `;
+        document.getElementById("downloadLink").href = data.download_url;
+        document.getElementById("output").classList.remove("hidden");
+        loadHistory();
+      } else {
+        alert("Gagal generate PPT");
+      }
+    });
+
+    // === Preview functions ===
+    async function openPreview(template) {
+      try {
+        const res = await fetch(`/api/template/${template}/slides`);
+        if (!res.ok) {
+          alert("Preview not available for this template");
+          return;
+        }
+        const data = await res.json();
+
+        const container = document.getElementById("previewSlides");
+        container.innerHTML = "";
+
+        data.slides.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.className = "rounded shadow border border-gray-700";
+          container.appendChild(img);
+        });
+
+        document.getElementById("previewModal").classList.remove("hidden");
+      } catch (err) {
+        console.error("Preview failed:", err);
+        alert("Failed to load preview");
+      }
+    }
+
+    function closePreview() {
+      document.getElementById("previewModal").classList.add("hidden");
+      document.getElementById("previewSlides").innerHTML = "";
+    }
+
+    // Load history on page load
+    loadHistory();
+  </script>
+</body>
+</html>
